@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tile-Placement / Puzzle Game Builder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f2fff0;
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+        }
+        .question {
+            display: none;
+            margin-bottom: 20px;
+        }
+        .question.active {
+            display: block;
+        }
+        .result {
+            display: none;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #ccc;
+        }
+        button {
+            background-color: #2ecc71;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #27ae60;
+        }
+    </style>
+</head>
+<body>
+
+<h1>🧩 Tile-Placement / Puzzle Game Builder</h1>
+<div class="question active" id="q1">
+    <p><strong>1. What type of puzzle are players solving?</strong></p>
+    <button onclick="nextQuestion('shape')">Creating or fitting shapes</button><br>
+    <button onclick="nextQuestion('pattern')">Matching colors, numbers, or symbols</button><br>
+    <button onclick="nextQuestion('path')">Building paths or completing a map</button>
+</div>
+
+<div class="question" id="q2">
+    <p><strong>2. How do players place tiles or pieces?</strong></p>
+    <button onclick="nextQuestion('turn_based')">Take turns placing tiles</button><br>
+    <button onclick="nextQuestion('real_time')">Place tiles as fast as possible</button><br>
+    <button onclick="nextQuestion('drafting')">Pick from a shared pool of pieces</button>
+</div>
+
+<div class="question" id="q3">
+    <p><strong>3. What kind of scoring or winning system do you want?</strong></p>
+    <button onclick="nextQuestion('most_points')">Player with the most points wins</button><br>
+    <button onclick="nextQuestion('complete_goal')">First to complete their puzzle/goal wins</button><br>
+    <button onclick="nextQuestion('perfect_fit')">Players get points based on perfect placements</button>
+</div>
+
+<div class="question" id="q4">
+    <p><strong>4. What’s the style or theme of your game?</strong></p>
+    <button onclick="nextQuestion('zen')">Relaxing, calm, and pretty (like gardens or mosaics)</button><br>
+    <button onclick="nextQuestion('adventure')">Adventure or exploration (like maps, dungeons)</button><br>
+    <button onclick="nextQuestion('abstract')">Abstract shapes and symbols – no real theme</button>
+</div>
+
+<div class="question" id="q5">
+    <p><strong>5. How do you want the board or play area to work?</strong></p>
+    <button onclick="showResult('shared')">One big shared board</button><br>
+    <button onclick="showResult('individual')">Each player has their own board</button><br>
+    <button onclick="showResult('combo')">Players build boards that eventually connect</button>
+</div>
+
+<div class="result" id="resultBox">
+    <h2>Your Game Blueprint</h2>
+    <p id="gameSummary"></p>
+    <button onclick="restartQuiz()">🔁 Retry</button>
+</div>
+
+<script>
+    let currentQuestion = 1;
+    let answers = [];
+
+    function nextQuestion(answer) {
+        answers.push(answer);
+        document.getElementById("q" + currentQuestion).classList.remove("active");
+        currentQuestion++;
+        document.getElementById("q" + currentQuestion).classList.add("active");
+    }
+
+    function showResult(finalAnswer) {
+        answers.push(finalAnswer);
+        document.getElementById("q" + currentQuestion).classList.remove("active");
+        document.getElementById("resultBox").style.display = "block";
+        document.getElementById("gameSummary").innerText = generateSummary();
+    }
+
+    function generateSummary() {
+        const puzzle = answers[0];
+        const placement = answers[1];
+        const scoring = answers[2];
+        const theme = answers[3];
+        const boardType = answers[4];
+
+        let puzzleText = puzzle === 'shape' ? "fit shapes together like a puzzle" :
+                         puzzle === 'pattern' ? "match colors, numbers, or symbols to score" :
+                         "build paths or maps by placing tiles in clever ways";
+        let placementText = placement === 'turn_based' ? "take turns placing tiles strategically" :
+                            placement === 'real_time' ? "race to place tiles quickly in real time" :
+                            "pick pieces from a shared pool each round";
+        let scoringText = scoring === 'most_points' ? "whoever has the most points at the end wins" :
+                          scoring === 'complete_goal' ? "the first to complete their board or goal wins" :
+                          "points are earned for perfect or high-scoring placements";
+        let themeText = theme === 'zen' ? "a calm and relaxing visual style like gardens or patterns" :
+                        theme === 'adventure' ? "an exploration feel like maps or treasure dungeons" :
+                        "an abstract style with shapes, numbers, or symbols";
+        let boardText = boardType === 'shared' ? "a single shared board that all players build together" :
+                        boardType === 'individual' ? "each player builds their own board" :
+                        "players build their own areas that eventually connect or interact";
+
+        return `Your tile/puzzle game lets players ${puzzleText}. They will ${placementText}, and the win condition is: ${scoringText}. The game's theme is ${themeText}, and the board setup uses ${boardText}. Start by designing 20 unique tiles, player boards (if needed), and scoring rules based on this idea!`;
+    }
+
+    function restartQuiz() {
+        answers = [];
+        document.getElementById("resultBox").style.display = "none";
+        currentQuestion = 1;
+        document.getElementById("q1").classList.add("active");
+    }
+</script>
+
+</body>
+</html>
